@@ -27,7 +27,9 @@ func main() {
 		data := <-ccbot.Messages
 
 		umsg, err := ccmsg.Unpackage(data, "MyPrivateKey")
-		if err != nil {
+		if err == ccmsg.ErrUnmatched {
+			continue
+		} else if err != nil {
 			log.Fatal(err)
 		}
 
