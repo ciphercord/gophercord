@@ -1,5 +1,5 @@
 > [!CAUTION]
-> Anyone can interact with the CipherCord API. Please sanitize responses to avoid errors and possible hijack attempts.
+> Anyone can interact with the CipherCord API. Please sanitize responses to avoid errors and possible hijacking attempts.
 
 # GopherCord [![MIT License](https://img.shields.io/badge/License-MIT-a10b31)](https://github.com/ciphercord/gophercord/blob/main/LICENSE)
 
