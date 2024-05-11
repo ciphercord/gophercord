@@ -19,7 +19,7 @@ var Messages = make(chan string)
 // Starts the CipherCord bot.
 func Init() error {
 	var err error
-	session, err = discordgo.New(Token)
+	session, err = discordgo.New("Bot " + Token)
 	if err != nil {
 		return err
 	}
