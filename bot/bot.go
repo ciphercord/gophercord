@@ -5,6 +5,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+var session *discordgo.Session
+
 // The public token of the CipherCord bot. Yes, this is meant to be seen by anyone.
 const Token string = "MTEyNjc0NDg5OTk5NjM1NjYzOA." + "GAl6qX." + "uu5QL6kv5lSqJ8Y5wcllXsyrInvvjjIDwjCUOA"
 
@@ -16,14 +18,15 @@ var Messages = make(chan string)
 
 // Starts the CipherCord bot.
 func Init() error {
-	s, err := discordgo.New(Token)
+	var err error
+	session, err = discordgo.New(Token)
 	if err != nil {
 		return err
 	}
 
-	s.Identify.Intents = discordgo.IntentGuildMessages
+	session.Identify.Intents = discordgo.IntentGuildMessages
 
-	s.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
+	session.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if m.ChannelID != ChannelID {
 			return
 		}
@@ -31,5 +34,10 @@ func Init() error {
 		Messages <- m.Content
 	})
 
-	return s.Open()
+	return session.Open()
+}
+
+func Send(s string) error {
+	_, err := session.ChannelMessageSend(ChannelID, s, nil)
+	return err
 }
