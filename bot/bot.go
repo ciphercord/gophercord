@@ -38,6 +38,6 @@ func Init() error {
 }
 
 func Send(s string) error {
-	_, err := session.ChannelMessageSend(ChannelID, s, nil)
+	_, err := session.ChannelMessageSend(ChannelID, s)
 	return err
 }
