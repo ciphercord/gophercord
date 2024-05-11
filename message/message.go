@@ -19,7 +19,7 @@ const EncryptionType string = "aes-256/gcm/b64r"
 const HashingType string = "sha-256/b64r/:32"
 
 // The API version number.
-const Version = "0.1"
+const Version = "1.0"
 
 // FIXME: Make asterisk note less wordy.
 
