@@ -1,7 +1,9 @@
 > [!CAUTION]
 > Anyone can interact with the CipherCord API. Please sanitize responses to avoid errors and possible hijacking attempts.
 
-# GopherCord [![MIT License](https://img.shields.io/badge/License-MIT-a10b31)](https://github.com/ciphercord/gophercord/blob/main/LICENSE)
+# GopherCord
+[![MIT License](https://img.shields.io/badge/License-MIT-a10b31)](https://github.com/ciphercord/gophercord/blob/main/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ciphercord/gophercord)](https://goreportcard.com/report/github.com/ciphercord/gophercord)
 
 **GopherCord** is a set of Go packages designed to aid in interacting with the CipherCord API from Go.
 
