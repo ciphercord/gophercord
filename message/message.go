@@ -20,6 +20,11 @@ const EncryptionType string = "aes-256/gcm/b64r"
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha-256/b64r/:32"
 
+// TODO: Add encoding field in API v2.
+// TODO: Replace JSON with something less horrid in API v2.
+// JavaScript Object Notation / Base64 (RAW)
+//const EncodingType string = "json/b64r"
+
 // The major API version number.
 const Version = "1"
 
