@@ -36,6 +36,8 @@ type UnencryptedMessage struct {
 	Version string // *API version number
 }
 
+// TODO: Make room a hashed value in API v2.
+
 // A package of encrypted data that is ready to be sent out in the world.
 type EncryptedMessage struct {
 	Key        string `json:"key"`        // Hash of key32.
