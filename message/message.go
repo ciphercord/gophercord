@@ -43,7 +43,7 @@ type UnencryptedMessage struct {
 // A package of encrypted data that is ready to be sent out in the world.
 type EncryptedMessage struct {
 	Key        string `json:"key"`        // Hash of key32.
-	Version    string `json:"version"`    // Unencrypted client version.
+	Version    string `json:"version"`    // Unencrypted API version.
 	Encryption string `json:"encryption"` // Unencrypted encryption type.
 	Hashing    string `json:"hashing"`    // Unencrypted hashing type.
 	Room       string `json:"room"`       // Unencrypted room name.
