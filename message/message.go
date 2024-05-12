@@ -15,6 +15,8 @@ import (
 // Advanced Encryption Standard (256-bit) / Galois/Counter Mode / Base64 (RAW)
 const EncryptionType string = "aes-256/gcm/b64r"
 
+// TODO: Change sha-256 to sha256 in API v2.
+
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha-256/b64r/:32"
 
