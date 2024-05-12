@@ -112,6 +112,30 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	return umsg, nil
 }
 
+// The same as DecryptMessage but it assumes everything matches up. It doesn't check to see if encryption types, hashing types, or keys match up. Will not return ErrUnmatched.
+func DecryptMessageUnstable(emsg EncryptedMessage, key string) (UnencryptedMessage, error) {
+	key32 := Hash32(key)
+
+	var umsg UnencryptedMessage
+
+	umsg.Version = emsg.Version
+	umsg.Room = emsg.Room
+
+	content, err := Decrypt(emsg.Content, key32)
+	if err != nil {
+		return UnencryptedMessage{}, err
+	}
+	umsg.Content = content
+
+	author, err := Decrypt(emsg.Author, key32)
+	if err != nil {
+		return UnencryptedMessage{}, err
+	}
+	umsg.Author = author
+
+	return umsg, nil
+}
+
 // Encodes an EncryptedMessage into a plain text string.
 func Encode(msg EncryptedMessage) (string, error) {
 	b, err := json.Marshal(msg)
