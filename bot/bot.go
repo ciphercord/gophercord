@@ -16,6 +16,8 @@ const ChannelID string = "1127831380567523408"
 // Any messages sent in the official CipherCord messaging channel will be sent through this chan.
 var Messages = make(chan string)
 
+// TODO: Change Messages to RawMessage
+
 // Starts the CipherCord bot.
 func Init() error {
 	var err error

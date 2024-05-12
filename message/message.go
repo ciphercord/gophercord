@@ -15,18 +15,20 @@ import (
 // Advanced Encryption Standard (256-bit) / Galois/Counter Mode / Base64 (RAW)
 const EncryptionType string = "aes-256/gcm/b64r"
 
+// TODO: Change sha-256 to sha256 in API v2.
+
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha-256/b64r/:32"
 
-// TODO: Change sha-256 to sha256 in API v2.
-
-// JavaScript Object Notation / Base64 (RAW)
-//const EncodingType string = "json/b64r"
 // TODO: Add encoding field in API v2.
 // TODO: Replace JSON with something less horrid in API v2.
+// JavaScript Object Notation / Base64 (RAW)
+//const EncodingType string = "json/b64r"
 
 // The major API version number.
 const Version = "1"
+
+// FIXME: Make asterisk note less wordy.
 
 // UnencryptedMessage represents a package of unencrypted information that will later be encrypted.
 // Nothing in this struct will ever be sent over the wire.
@@ -41,7 +43,7 @@ type UnencryptedMessage struct {
 	Version string // *API version number
 }
 
-// FIXME: Make asterisk note less wordy.
+// TODO: Make room a hashed value in API v2.
 
 // A package of encrypted data that is ready to be sent out in the world.
 type EncryptedMessage struct {
@@ -53,8 +55,6 @@ type EncryptedMessage struct {
 	Content    string `json:"content"`    // Encrypted message content.
 	Author     string `json:"author"`     // Encrypted nickname of author.
 }
-
-// TODO: Make room a hashed value in API v2.
 
 // Converts an UnencryptedMessage into an EncryptedMessage.
 func EncryptMessage(umsg UnencryptedMessage) (EncryptedMessage, error) {
