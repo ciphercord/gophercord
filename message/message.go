@@ -20,7 +20,7 @@ const EncryptionType string = "aes-256/gcm/b64r"
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha-256/b64r/:32"
 
-// The API version number.
+// The major API version number.
 const Version = "1"
 
 // FIXME: Make asterisk note less wordy.
