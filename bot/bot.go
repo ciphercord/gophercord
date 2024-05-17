@@ -8,7 +8,7 @@ import (
 var session *discordgo.Session
 
 // The public token of the CipherCord bot. Yes, this is meant to be seen by anyone.
-const Token string = "MTEyNjc0NDg5OTk5NjM1NjYzOA." + "GAl6qX." + "uu5QL6kv5lSqJ8Y5wcllXsyrInvvjjIDwjCUOA"
+const Token string = "MTI0MDg0MzIyNDkyNzU2Nzk4Mg." + "G42Qkq." + "oAK5X3SuhUCdKD3yLI9SsUbpGiCmkIB4a3rUQY"
 
 // The messaging channel in the official CipherCord Discord server.
 const ChannelID string = "1127831380567523408"
