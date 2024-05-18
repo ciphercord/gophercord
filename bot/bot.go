@@ -13,10 +13,8 @@ const Token string = "MTI0MDg0MzIyNDkyNzU2Nzk4Mg." + "G42Qkq." + "oAK5X3SuhUCdKD
 // The messaging channel in the official CipherCord Discord server.
 const ChannelID string = "1127831380567523408"
 
-// Any messages sent in the official CipherCord messaging channel will be sent through this chan.
-var Messages = make(chan string)
-
-// TODO: Change Messages to RawMessage
+// The contents of any new message sent in the official CipherCord messaging channel will be sent through here.
+var RawMessages = make(chan string)
 
 // Starts the CipherCord bot.
 func Init() error {
@@ -33,7 +31,7 @@ func Init() error {
 			return
 		}
 
-		Messages <- m.Content
+		RawMessages <- m.Content
 	})
 
 	return session.Open()
