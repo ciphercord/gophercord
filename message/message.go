@@ -30,10 +30,11 @@ const Version = "2"
 //
 // The * indicates the field will be seen as hashed when decrypted.
 type UnencryptedMessage struct {
-	Key     string // Secret password in plain text
-	Room    string // *Room name
-	Content string // Message content
-	Author  string // Author's nickname
+	Key      string // Secret password in plain text
+	Room     string // *Room name
+	FileType string // File type of Content. Empty when Content is a message and not a file.
+	Content  string // Message/file content
+	Author   string // Author's nickname
 }
 
 // A package of encrypted data that is ready to be sent out in the world.
@@ -44,7 +45,8 @@ type EncryptedMessage struct {
 	Hashing    string // Unencrypted hashing type.
 	Packaging  string // Unencrypted packaging type.
 	Room       string // Hash of room name.
-	Content    string // Encrypted message content.
+	FileType   string // Unencrypted file type. Empty when Content is a message and not a file.
+	Content    string // Encrypted message/file content.
 	Author     string // Encrypted nickname of author.
 }
 
