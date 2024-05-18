@@ -7,53 +7,45 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"io"
+
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 // Advanced Encryption Standard (256-bit) / Galois/Counter Mode / Base64 (RAW)
 const EncryptionType string = "aes-256/gcm/b64r"
 
-// TODO: Change sha-256 to sha256 in API v2.
-
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
-const HashingType string = "sha-256/b64r/:32"
+const HashingType string = "sha256/b64r/:32"
 
-// TODO: Add encoding field in API v2.
-// TODO: Replace JSON with something less horrid in API v2.
-// JavaScript Object Notation / Base64 (RAW)
-//const EncodingType string = "json/b64r"
+// MessagePack / Base64 (RAW)
+const PackagingType string = "msgpack/b64r"
 
 // The major API version number.
-const Version = "1"
-
-// FIXME: Make asterisk note less wordy.
+const Version = "2"
 
 // UnencryptedMessage represents a package of unencrypted information that will later be encrypted.
 // Nothing in this struct will ever be sent over the wire.
 //
-// The * indicates that this field has a preassigned value at the packaging step. It is only useful after decryption.
+// The * indicates the field will be seen as hashed when decrypted.
 type UnencryptedMessage struct {
 	Key     string // Secret password in plain text
-	Room    string // Room name
+	Room    string // *Room name
 	Content string // Message content
 	Author  string // Author's nickname
-
-	Version string // *API version number
 }
-
-// TODO: Make room a hashed value in API v2.
 
 // A package of encrypted data that is ready to be sent out in the world.
 type EncryptedMessage struct {
-	Key        string `json:"key"`        // Hash of key32.
-	Version    string `json:"version"`    // Unencrypted API version.
-	Encryption string `json:"encryption"` // Unencrypted encryption type.
-	Hashing    string `json:"hashing"`    // Unencrypted hashing type.
-	Room       string `json:"room"`       // Unencrypted room name.
-	Content    string `json:"content"`    // Encrypted message content.
-	Author     string `json:"author"`     // Encrypted nickname of author.
+	Key        string // Hash of key32.
+	Version    string // Unencrypted API version.
+	Encryption string // Unencrypted encryption type.
+	Hashing    string // Unencrypted hashing type.
+	Packaging  string // Unencrypted packaging type.
+	Room       string // Hash of room name.
+	Content    string // Encrypted message content.
+	Author     string // Encrypted nickname of author.
 }
 
 // Converts an UnencryptedMessage into an EncryptedMessage.
@@ -68,7 +60,8 @@ func EncryptMessage(umsg UnencryptedMessage) (EncryptedMessage, error) {
 	emsg.Version = Version
 	emsg.Encryption = EncryptionType
 	emsg.Hashing = HashingType
-	emsg.Room = umsg.Room
+	emsg.Packaging = PackagingType
+	emsg.Room = Hash32(umsg.Room)
 
 	content, err := Encrypt(umsg.Content, key32)
 	if err != nil {
@@ -93,13 +86,12 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	key32 := Hash32(key)
 	keyHash := Hash32(key32)
 
-	if emsg.Key != keyHash || emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Version == Version {
+	if emsg.Key != keyHash || emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType || emsg.Version == Version {
 		return UnencryptedMessage{}, ErrUnmatched
 	}
 
 	var umsg UnencryptedMessage
 
-	umsg.Version = emsg.Version
 	umsg.Room = emsg.Room
 
 	content, err := Decrypt(emsg.Content, key32)
@@ -117,13 +109,14 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	return umsg, nil
 }
 
-// The same as DecryptMessage but it assumes everything matches up. It doesn't check to see if encryption types, hashing types, or keys match up. Will not return ErrUnmatched.
+// The same as DecryptMessage but it assumes everything matches up.
+// It doesn't check to see if encryption types, hashing types, or keys match up.
+// Will not return ErrUnmatched.
 func DecryptMessageUnstable(emsg EncryptedMessage, key string) (UnencryptedMessage, error) {
 	key32 := Hash32(key)
 
 	var umsg UnencryptedMessage
 
-	umsg.Version = emsg.Version
 	umsg.Room = emsg.Room
 
 	content, err := Decrypt(emsg.Content, key32)
@@ -143,7 +136,7 @@ func DecryptMessageUnstable(emsg EncryptedMessage, key string) (UnencryptedMessa
 
 // Encodes an EncryptedMessage into a plain text string.
 func Encode(msg EncryptedMessage) (string, error) {
-	b, err := json.Marshal(msg)
+	b, err := msgpack.Marshal(msg)
 	if err != nil {
 		return "", err
 	}
@@ -160,7 +153,7 @@ func Decode(s string) (EncryptedMessage, error) {
 
 	var emsg EncryptedMessage
 
-	err = json.Unmarshal(b, &emsg)
+	err = msgpack.Unmarshal(b, &emsg)
 	if err != nil {
 		return EncryptedMessage{}, err
 	}
