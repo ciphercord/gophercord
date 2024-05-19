@@ -80,16 +80,22 @@ func EncryptMessage(umsg UnencryptedMessage) (EncryptedMessage, error) {
 	return emsg, nil
 }
 
-// Not a serious error message, this usually means either the key doesn't match or the message was packaged with a different client.
-var ErrUnmatched error = fmt.Errorf("ciphercord: one or more unmatched fields")
+// Not a serious error message, this just means you have the wrong key. Probably user error.
+var ErrKeyUnmatched error = fmt.Errorf("ciphercord: one or more unmatched fields")
+
+// Usually means message was packaged with a different client.
+var ErrOtherUnmatched error = fmt.Errorf("ciphercord: one or more unmatched fields")
 
 // Converts an EncryptedMessage into an UnencryptedMessage.
 func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, error) {
 	key32 := Hash32(key)
 	keyHash := Hash32(key32)
 
-	if emsg.Key != keyHash || emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType || emsg.Version == Version {
-		return UnencryptedMessage{}, ErrUnmatched
+	if emsg.Key != keyHash {
+		return UnencryptedMessage{}, ErrKeyUnmatched
+	}
+	if emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType || emsg.Version == Version {
+		return UnencryptedMessage{}, ErrOtherUnmatched
 	}
 
 	var umsg UnencryptedMessage
