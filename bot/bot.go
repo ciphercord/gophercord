@@ -44,7 +44,7 @@ func Send(s string) error {
 }
 
 // Gets the amt most recent messages in raw form and sends it through RawMessages.
-func MessageHistory(amt int) error {
+func RawMessageHistory(amt int) error {
 	msgs, err := session.ChannelMessages(ChannelID, amt, "", "", "")
 	if err != nil {
 		return err
