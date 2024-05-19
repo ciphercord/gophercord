@@ -83,11 +83,8 @@ func EncryptMessage(umsg UnencryptedMessage) (EncryptedMessage, error) {
 // Not a serious error message, this just means you have the wrong key. Probably user error.
 var ErrKeyUnmatched error = fmt.Errorf("ciphercord: key does not match")
 
-// API Version doesn't match. A major change has happened between your client and their client making it impossible use.
-var ErrVersionUnmatched error = fmt.Errorf("ciphercord: version does not match")
-
-// Usually means message was packaged with a different client.
-var ErrTypesUnmatched error = fmt.Errorf("ciphercord: one or more type fields do not match")
+// Usually means message was packaged with a different client. Impossible to decode, decrypt, etc.
+var ErrUnmatched error = fmt.Errorf("ciphercord: one or more type fields do not match")
 
 // Converts an EncryptedMessage into an UnencryptedMessage.
 func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, error) {
@@ -97,11 +94,8 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	if emsg.Key != keyHash {
 		return UnencryptedMessage{}, ErrKeyUnmatched
 	}
-	if emsg.Version != Version {
-		return UnencryptedMessage{}, ErrVersionUnmatched
-	}
-	if emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType {
-		return UnencryptedMessage{}, ErrTypesUnmatched
+	if emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType || emsg.Version != Version {
+		return UnencryptedMessage{}, ErrUnmatched
 	}
 
 	var umsg UnencryptedMessage
