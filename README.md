@@ -35,7 +35,11 @@ func main() {
 			fmt.Println(err)
 		}
 
-		fmt.Printf("%s: %s\n", umsg.Author, umsg.Content)
+		if umsg.Filename == "" {
+			fmt.Printf("%s: %s\n", umsg.Author, umsg.Content)
+		} else {
+			fmt.Printf("%s: %s\n", umsg.Author, umsg.Filename)
+		}
 	}
 }
 ```
