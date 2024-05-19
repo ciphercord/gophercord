@@ -37,7 +37,22 @@ func Init() error {
 	return session.Open()
 }
 
+// Sends string to the official CipherCord messaging channel.
 func Send(s string) error {
 	_, err := session.ChannelMessageSend(ChannelID, s)
 	return err
+}
+
+// Gets the 100 most recent messages in raw form and sends it through RawMessages.
+func MessageHistory() error {
+	msgs, err := session.ChannelMessages(ChannelID, 100, "", "", "")
+	if err != nil {
+		return err
+	}
+
+	for _, m := range msgs {
+		RawMessages <- m.Content
+	}
+
+	return nil
 }
