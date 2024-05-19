@@ -29,10 +29,10 @@ func main() {
 		rmsg := <-ccbot.RawMessages
 
 		umsg, err := ccmsg.Unpackage(rmsg, "MyPrivateKey")
-		if err == ccmsg.ErrKeyUnmatched || err == ccmsg.ErrVersionUnmatched || err == ccmsg.ErrTypesUnmatched {
+		if err == ccmsg.ErrKeyUnmatched || err == ccmsg.ErrUnmatched {
 			continue
 		} else if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 
 		fmt.Printf("%s: %s\n", umsg.Author, umsg.Content)
