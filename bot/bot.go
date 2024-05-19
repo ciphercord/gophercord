@@ -43,6 +43,8 @@ func Send(s string) error {
 	return err
 }
 
+// FIXME: RawMessageHistory just freezes when you use it.
+
 // Gets the amt most recent messages in raw form and sends it through RawMessages.
 func RawMessageHistory(amt int) error {
 	msgs, err := session.ChannelMessages(ChannelID, amt, "", "", "")
