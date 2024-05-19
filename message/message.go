@@ -158,18 +158,24 @@ func Encode(msg EncryptedMessage) (string, error) {
 	return base64.RawStdEncoding.EncodeToString(b), nil
 }
 
+// Could not decode the string
+var ErrNoDecode = fmt.Errorf("ciphercord: could not decode string")
+
+// Could not unmarshal the string
+var ErrNoUnmarshal = fmt.Errorf("ciphercord: could not unmarshal string")
+
 // Decodes a plain text string back into an EncryptedMessage.
 func Decode(s string) (EncryptedMessage, error) {
 	b, err := base64.RawStdEncoding.DecodeString(s)
 	if err != nil {
-		return EncryptedMessage{}, err
+		return EncryptedMessage{}, ErrNoDecode
 	}
 
 	var emsg EncryptedMessage
 
 	err = msgpack.Unmarshal(b, &emsg)
 	if err != nil {
-		return EncryptedMessage{}, err
+		return EncryptedMessage{}, ErrNoUnmarshal
 	}
 
 	return emsg, nil
