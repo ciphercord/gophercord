@@ -26,10 +26,10 @@ func main() {
 	}
 
 	for {
-		data := <-ccbot.Messages
+		rmsg := <-ccbot.RawMessages
 
-		umsg, err := ccmsg.Unpackage(data, "MyPrivateKey")
-		if err == ccmsg.ErrUnmatched {
+		umsg, err := ccmsg.Unpackage(rmsg, "MyPrivateKey")
+		if err == ccmsg.ErrKeyUnmatched || err == ccmsg.ErrVersionUnmatched || err == ccmsg.ErrTypesUnmatched {
 			continue
 		} else if err != nil {
 			log.Fatal(err)
