@@ -32,7 +32,7 @@ const Version = "2"
 type UnencryptedMessage struct {
 	Key      string // Secret password in plain text
 	Room     string // *Room name
-	FileType string // File type of Content. Empty when Content is a message and not a file.
+	Filename string // File name of Content. Empty when Content is a message and not a file.
 	Content  string // Message/file content
 	Author   string // Author's nickname
 }
@@ -45,7 +45,7 @@ type EncryptedMessage struct {
 	Hashing    string // Unencrypted hashing type.
 	Packaging  string // Unencrypted packaging type.
 	Room       string // Hash of room name.
-	FileType   string // Unencrypted file type. Empty when Content is a message and not a file.
+	Filename   string // Unencrypted file name. Empty when Content is a message and not a file.
 	Content    string // Encrypted message/file content.
 	Author     string // Encrypted nickname of author.
 }
