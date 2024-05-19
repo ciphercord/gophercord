@@ -93,7 +93,7 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	key32 := Hash32(key)
 	keyHash := Hash32(key32)
 
-	if emsg.Key != keyHash || emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Version == Version {
+	if emsg.Key != keyHash || emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Version != Version {
 		return UnencryptedMessage{}, ErrUnmatched
 	}
 
