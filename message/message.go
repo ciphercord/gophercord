@@ -13,8 +13,12 @@ import (
 	"github.com/vmihailenco/msgpack/v5"
 )
 
+// FIXME: Eradicate b64r (just use []byte instead of converting to string)
+
 // Advanced Encryption Standard (256-bit) / Galois/Counter Mode / Base64 (RAW)
 const EncryptionType string = "aes-256/gcm/b64r"
+
+// FIXME: Eradicate b64r/:32 (just use []byte instead of converting to string (its also more secure))
 
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha256/b64r/:32"
