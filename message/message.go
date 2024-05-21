@@ -23,9 +23,6 @@ const EncryptionType string = "aes-256/gcm/b64r"
 // Secure Hash Algorithm (256-bit) / Base64 (RAW) / Cut 32
 const HashingType string = "sha256/b64r/:32"
 
-// MessagePack / Base64 (RAW)
-const PackagingType string = "msgpack/b64r"
-
 // The major API version number.
 const Version = "2"
 
@@ -47,7 +44,6 @@ type EncryptedMessage struct {
 	Version    string // Unencrypted API version.
 	Encryption string // Unencrypted encryption type.
 	Hashing    string // Unencrypted hashing type.
-	Packaging  string // Unencrypted packaging type.
 	Room       string // Hash of room name.
 	Filename   string // Unencrypted file name. Empty when Content is a message and not a file.
 	Content    string // Encrypted message/file content.
@@ -66,7 +62,6 @@ func EncryptMessage(umsg UnencryptedMessage) (EncryptedMessage, error) {
 	emsg.Version = Version
 	emsg.Encryption = EncryptionType
 	emsg.Hashing = HashingType
-	emsg.Packaging = PackagingType
 	emsg.Room = Hash32(umsg.Room)
 
 	content, err := Encrypt(umsg.Content, key32)
@@ -98,7 +93,7 @@ func DecryptMessage(emsg EncryptedMessage, key string) (UnencryptedMessage, erro
 	if emsg.Key != keyHash {
 		return UnencryptedMessage{}, ErrKeyUnmatched
 	}
-	if emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Packaging != PackagingType || emsg.Version != Version {
+	if emsg.Encryption != EncryptionType || emsg.Hashing != HashingType || emsg.Version != Version {
 		return UnencryptedMessage{}, ErrUnmatched
 	}
 
